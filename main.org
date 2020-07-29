@@ -1,0 +1,13 @@
+* Package import
+
+  Import packages and read the data
+
+#+begin_src python :session
+import pandas as pd
+
+train = read.csv("train.csv") 
+
+#+end_src
+
+#+RESULTS:
+
