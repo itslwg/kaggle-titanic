@@ -99,31 +99,31 @@ train.describe(include='all')
   :results:
   # Out[4]:
   #+BEGIN_EXAMPLE
-    PassengerId    Survived      Pclass              Name   Sex  \
-    count    891.000000  891.000000  891.000000               891   891
-    unique          NaN         NaN         NaN               891     2
-    top             NaN         NaN         NaN  Kelly, Mr. James  male
-    freq            NaN         NaN         NaN                 1   577
-    mean     446.000000    0.383838    2.308642               NaN   NaN
-    std      257.353842    0.486592    0.836071               NaN   NaN
-    min        1.000000    0.000000    1.000000               NaN   NaN
-    25%      223.500000    0.000000    2.000000               NaN   NaN
-    50%      446.000000    0.000000    3.000000               NaN   NaN
-    75%      668.500000    1.000000    3.000000               NaN   NaN
-    max      891.000000    1.000000    3.000000               NaN   NaN
+    PassengerId    Survived      Pclass                       Name   Sex  \
+    count    891.000000  891.000000  891.000000                        891   891
+    unique          NaN         NaN         NaN                        891     2
+    top             NaN         NaN         NaN  Becker, Master. Richard F  male
+    freq            NaN         NaN         NaN                          1   577
+    mean     446.000000    0.383838    2.308642                        NaN   NaN
+    std      257.353842    0.486592    0.836071                        NaN   NaN
+    min        1.000000    0.000000    1.000000                        NaN   NaN
+    25%      223.500000    0.000000    2.000000                        NaN   NaN
+    50%      446.000000    0.000000    3.000000                        NaN   NaN
+    75%      668.500000    1.000000    3.000000                        NaN   NaN
+    max      891.000000    1.000000    3.000000                        NaN   NaN
 
-    Age       SibSp       Parch    Ticket        Fare        Cabin  \
-    count   714.000000  891.000000  891.000000       891  891.000000          204
-    unique         NaN         NaN         NaN       681         NaN          147
-    top            NaN         NaN         NaN  CA. 2343         NaN  C23 C25 C27
-    freq           NaN         NaN         NaN         7         NaN            4
-    mean     29.699118    0.523008    0.381594       NaN   32.204208          NaN
-    std      14.526497    1.102743    0.806057       NaN   49.693429          NaN
-    min       0.420000    0.000000    0.000000       NaN    0.000000          NaN
-    25%      20.125000    0.000000    0.000000       NaN    7.910400          NaN
-    50%      28.000000    0.000000    0.000000       NaN   14.454200          NaN
-    75%      38.000000    1.000000    0.000000       NaN   31.000000          NaN
-    max      80.000000    8.000000    6.000000       NaN  512.329200          NaN
+    Age       SibSp       Parch    Ticket        Fare Cabin  \
+    count   714.000000  891.000000  891.000000       891  891.000000   204
+    unique         NaN         NaN         NaN       681         NaN   147
+    top            NaN         NaN         NaN  CA. 2343         NaN    G6
+    freq           NaN         NaN         NaN         7         NaN     4
+    mean     29.699118    0.523008    0.381594       NaN   32.204208   NaN
+    std      14.526497    1.102743    0.806057       NaN   49.693429   NaN
+    min       0.420000    0.000000    0.000000       NaN    0.000000   NaN
+    25%      20.125000    0.000000    0.000000       NaN    7.910400   NaN
+    50%      28.000000    0.000000    0.000000       NaN   14.454200   NaN
+    75%      38.000000    1.000000    0.000000       NaN   31.000000   NaN
+    max      80.000000    8.000000    6.000000       NaN  512.329200   NaN
 
     Embarked
     count       889
@@ -180,7 +180,7 @@ plt.bar(
   :results:
   # Out[6]:
   : <BarContainer object of 2 artists>
-  [[file:./obipy-resources/wnhncF.png]]
+  [[file:./obipy-resources/sikPCO.png]]
   :end:
 
   Find proportions of the survived against the non-survived
@@ -224,7 +224,7 @@ for row in rows:
   #+RESULTS:
   :results:
   # Out[8]:
-  [[file:./obipy-resources/u7kSXM.png]]
+  [[file:./obipy-resources/jdRevr.png]]
   :end:
 
   From which we recognize that the Pclass and Embarked has the potential of being strong predictors.
@@ -348,8 +348,8 @@ sns.catplot(
   #+RESULTS:
   :results:
   # Out[13]:
-  : <seaborn.axisgrid.FacetGrid at 0x7fb582852c18>
-  [[file:./obipy-resources/1482uK.png]]
+  : <seaborn.axisgrid.FacetGrid at 0x7f95269756d8>
+  [[file:./obipy-resources/3R7FRZ.png]]
   :end:
 
   #+BEGIN_SRC ipython :session :exports both :results raw drawer :async t
@@ -362,9 +362,9 @@ sns.countplot(
 
   #+RESULTS:
   :results:
-  # Out[15]:
+  # Out[14]:
   : <AxesSubplot:xlabel='Deck_0', ylabel='count'>
-  [[file:./obipy-resources/qX4GPo.png]]
+  [[file:./obipy-resources/HxsZh8.png]]
   :end:
 
   The second plot tells a bit more of the deck variable. Maybe our model will be able to pick out based
@@ -382,9 +382,9 @@ sns.countplot(
 
   #+RESULTS:
   :results:
-  # Out[16]:
+  # Out[15]:
   : <AxesSubplot:xlabel='Deck_1', ylabel='count'>
-  [[file:./obipy-resources/vouWAi.png]]
+  [[file:./obipy-resources/Hjhyna.png]]
   :end:
   
   I suppose the multiple cabins for 1 person suggests that they travelled multiple people. That is already
@@ -403,8 +403,8 @@ for i in range(0, 4):
 
   #+RESULTS:
   :results:
-  # Out[17]:
-  [[file:./obipy-resources/YG6N1K.png]]
+  # Out[16]:
+  [[file:./obipy-resources/JpcHEw.png]]
   :end:
   
   We can also visualize our continuous variables:
@@ -432,8 +432,8 @@ for k, var in enumerate(con_variables):
 
   #+RESULTS:
   :results:
-  # Out[18]:
-  [[file:./obipy-resources/ZjiNu7.png]]
+  # Out[17]:
+  [[file:./obipy-resources/s5bFnB.png]]
   :end:
 
 * Do data transformation and drop variables, e.g. transform categorical variables to dummy variables.
@@ -475,22 +475,9 @@ X, y = prepare_sample(
 
   #+RESULTS:
   :results:
-  # Out[19]:
+  # Out[18]:
   :end:
-
-  #+BEGIN_SRC ipython :session :exports both :results raw drawer :async t
-# label_encoder object knows how to understand word labels. 
-label_encoder = preprocessing.LabelEncoder() 
-
-# Encode labels in column 'Species'. 
-label_encoder.fit_transform(X)
-  #+END_SRC
-
-  #+RESULTS:
-  :results:
-  0 - c97d3fe5-98f8-4957-9c1a-8c166d95ed8b
-  :end:
-    
+  
 * Run modelling
   
 Conduct modelling, by running randomized search cv for multiple parameters
@@ -498,8 +485,7 @@ Conduct modelling, by running randomized search cv for multiple parameters
 #+BEGIN_SRC ipython :session :exports both :results raw drawer :async t
 # Specify classifiers
 clfs = {
-    'svc': SVC(),
-    # 'rf': RandomForestClassifier(random_state=0),
+    'rf': RandomForestClassifier(random_state=0),
 }
 # Setup pipelines for variable types
 numeric_transformer = Pipeline(
@@ -536,16 +522,12 @@ preprocessor = ColumnTransformer(
 )
 clf = Pipeline(steps=[
     ('preprocessor', preprocessor),
-    ('classifier', SVC())
+    ('classifier',  RandomForestClassifier(random_state=0))
 ])
 # Setup hyperparameter grid
 param_grid = {
-    # 'rf': {
-    #     'randomforestclassifier__max_depth': [0.5, 0.7],
-    #     'randomforestclassifier__n_estimators': np.arange(100, 500, 50)
-    # },
-    'classifier__C': np.linspace(0.001, 0.5, 10),
-    'classifier__kernel': ['linear', 'sigmoid']
+    'classifier__max_depth': [0.5, 0.7],
+    'classifier__n_estimators': np.arange(100, 200, 50)
 }
 
 g = GridSearchCV(
@@ -554,18 +536,11 @@ g = GridSearchCV(
     param_grid=param_grid,
     scoring='accuracy'
 ).fit(X,y)
-    # scores = cross_val_score(
-    #     estimator=pipe,
-    #     X=X,
-    #     y=y,
-    #     scoring='accuracy'
-    # )
-    # scores_df[k] = scores
 #+END_SRC
 
 #+RESULTS:
 :results:
-# Out[54]:
+# Out[20]:
 :end:
 
 * Use Gridsearch results to predict on the test data
@@ -576,7 +551,7 @@ X_test, y_test = prepare_sample(test, None)
 
 #+RESULTS:
 :results:
-# Out[61]:
+# Out[21]:
 :end:
 
 #+BEGIN_SRC ipython :session :exports both :results raw drawer :async t
@@ -585,7 +560,7 @@ X_test.head()
 
 #+RESULTS:
 :results:
-# Out[63]:
+# Out[22]:
 #+BEGIN_EXAMPLE
   Pclass     Sex   Age  SibSp  Parch     Fare Embarked Deck_0 Room_0 Deck_1  \
   0       3    male  34.5      0      0   7.8292        Q    NaN    NaN    NaN
@@ -609,7 +584,7 @@ predictions = g.predict(X_test)
 
 #+RESULTS:
 :results:
-# Out[66]:
+# Out[23]:
 :end:
 
 #+BEGIN_SRC ipython :session :exports both :results raw drawer
@@ -618,10 +593,10 @@ submission = pd.concat([
     pd.Series(predictions)
 ], axis=1)
 submission.columns = ['PassengerId', 'Survived']
-submission.to_csv("./submissions/submission_24102020.csv", index=False)
+submission.to_csv("./submissions/submission_25102020.csv", index=False)
 #+END_SRC
 
 #+RESULTS:
 :results:
-# Out[68]:
+# Out[25]:
 :end:
