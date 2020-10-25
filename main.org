@@ -543,6 +543,17 @@ g = GridSearchCV(
 # Out[20]:
 :end:
 
+#+BEGIN_SRC ipython :session :exports both :results raw drawer :async t
+g.best_score_
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[27]:
+: 0.6161634548992531
+:end:
+
+
 * Use Gridsearch results to predict on the test data
 
 #+BEGIN_SRC ipython :session :exports both :results raw drawer :async t
