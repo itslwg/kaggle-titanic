@@ -590,16 +590,32 @@ predictions = g.predict(X_test)
 # Out[23]:
 :end:
 
+* Submit predictions
+  
 #+BEGIN_SRC ipython :session :exports both :results raw drawer
+import datetime as dt
+t = dt.datetime.today().strftime("%d%m%Y")
 submission = pd.concat([
     test.PassengerId,
     pd.Series(predictions)
 ], axis=1)
 submission.columns = ['PassengerId', 'Survived']
-submission.to_csv("./submissions/submission_25102020.csv", index=False)
+submission.to_csv(f"./submissions/submission_{t}.csv", index=False)
 #+END_SRC
 
 #+RESULTS:
 :results:
-# Out[25]:
+# Out[37]:
 :end:
+
+#+BEGIN_SRC ipython :session :exports both :results raw drawer :async t
+import os
+os.system(f"kaggle competitions submit -c titanic -f submissions/submission_{t}.csv -m 'Submission {t}'")
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[38]:
+: 0
+:end:
+
