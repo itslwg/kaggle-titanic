@@ -22,43 +22,13 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import LinearSVC
 from sklearn.model_selection import GridSearchCV, cross_val_score
 from sklearn.base import TransformerMixin
+
+import xgboost as xgb
 #+END_SRC
 
 #+RESULTS:
 :results:
-# Out[1]:
-:end:
-
-Define a custom imputer class for use in dataframe that has both categorical and 
-numerical variables.
-
-#+BEGIN_SRC ipython :session :exports both :results raw drawer :async t
-class CategoricalNumericalImputer(TransformerMixin):
-
-    def __init__(self):
-        """Impute missing values.
-
-        Columns of dtype object are imputed with the most frequent value 
-        in column.
-
-        Columns of other types are imputed with mean of column.
-
-        """
-    def fit(self, X, y=None):
-
-        self.fill = pd.Series([X[c].value_counts().index[0]
-            if X[c].dtype == np.dtype('O') else X[c].mean() for c in X],
-            index=X.columns)
-
-        return self
-
-    def transform(self, X, y=None):
-        return X.fillna(self.fill)
-#+END_SRC
-
-#+RESULTS:
-:results:
-# Out[2]:
+# Out[20]:
 :end:
 
 #+BEGIN_SRC ipython :session :exports both :results raw drawer :async t
@@ -68,7 +38,7 @@ test = pd.read_csv("data/test.csv")
 
 #+RESULTS:
 :results:
-# Out[3]:
+# Out[2]:
 :end:
 
 * Do data exploration
@@ -90,33 +60,33 @@ train.describe(include='all')
 
   #+RESULTS:
   :results:
-  # Out[4]:
+  # Out[3]:
   #+BEGIN_EXAMPLE
-    PassengerId    Survived      Pclass                       Name   Sex  \
-    count    891.000000  891.000000  891.000000                        891   891
-    unique          NaN         NaN         NaN                        891     2
-    top             NaN         NaN         NaN  Becker, Master. Richard F  male
-    freq            NaN         NaN         NaN                          1   577
-    mean     446.000000    0.383838    2.308642                        NaN   NaN
-    std      257.353842    0.486592    0.836071                        NaN   NaN
-    min        1.000000    0.000000    1.000000                        NaN   NaN
-    25%      223.500000    0.000000    2.000000                        NaN   NaN
-    50%      446.000000    0.000000    3.000000                        NaN   NaN
-    75%      668.500000    1.000000    3.000000                        NaN   NaN
-    max      891.000000    1.000000    3.000000                        NaN   NaN
+    PassengerId    Survived      Pclass                            Name  \
+    count    891.000000  891.000000  891.000000                             891
+    unique          NaN         NaN         NaN                             891
+    top             NaN         NaN         NaN  Nirva, Mr. Iisakki Antino Aijo
+    freq            NaN         NaN         NaN                               1
+    mean     446.000000    0.383838    2.308642                             NaN
+    std      257.353842    0.486592    0.836071                             NaN
+    min        1.000000    0.000000    1.000000                             NaN
+    25%      223.500000    0.000000    2.000000                             NaN
+    50%      446.000000    0.000000    3.000000                             NaN
+    75%      668.500000    1.000000    3.000000                             NaN
+    max      891.000000    1.000000    3.000000                             NaN
 
-    Age       SibSp       Parch    Ticket        Fare Cabin  \
-    count   714.000000  891.000000  891.000000       891  891.000000   204
-    unique         NaN         NaN         NaN       681         NaN   147
-    top            NaN         NaN         NaN  CA. 2343         NaN    G6
-    freq           NaN         NaN         NaN         7         NaN     4
-    mean     29.699118    0.523008    0.381594       NaN   32.204208   NaN
-    std      14.526497    1.102743    0.806057       NaN   49.693429   NaN
-    min       0.420000    0.000000    0.000000       NaN    0.000000   NaN
-    25%      20.125000    0.000000    0.000000       NaN    7.910400   NaN
-    50%      28.000000    0.000000    0.000000       NaN   14.454200   NaN
-    75%      38.000000    1.000000    0.000000       NaN   31.000000   NaN
-    max      80.000000    8.000000    6.000000       NaN  512.329200   NaN
+    Sex         Age       SibSp       Parch  Ticket        Fare Cabin  \
+    count    891  714.000000  891.000000  891.000000     891  891.000000   204
+    unique     2         NaN         NaN         NaN     681         NaN   147
+    top     male         NaN         NaN         NaN  347082         NaN    G6
+    freq     577         NaN         NaN         NaN       7         NaN     4
+    mean     NaN   29.699118    0.523008    0.381594     NaN   32.204208   NaN
+    std      NaN   14.526497    1.102743    0.806057     NaN   49.693429   NaN
+    min      NaN    0.420000    0.000000    0.000000     NaN    0.000000   NaN
+    25%      NaN   20.125000    0.000000    0.000000     NaN    7.910400   NaN
+    50%      NaN   28.000000    0.000000    0.000000     NaN   14.454200   NaN
+    75%      NaN   38.000000    1.000000    0.000000     NaN   31.000000   NaN
+    max      NaN   80.000000    8.000000    6.000000     NaN  512.329200   NaN
 
     Embarked
     count       889
@@ -153,7 +123,7 @@ s
 
   #+RESULTS:
   :results:
-  # Out[5]:
+  # Out[4]:
   #+BEGIN_EXAMPLE
     No     549
     Yes    342
@@ -171,9 +141,9 @@ plt.bar(
 
   #+RESULTS:
   :results:
-  # Out[6]:
+  # Out[5]:
   : <BarContainer object of 2 artists>
-  [[file:./obipy-resources/sikPCO.png]]
+  [[file:./obipy-resources/nd1R6k.png]]
   :end:
 
   Find proportions of the survived against the non-survived
@@ -184,7 +154,7 @@ s / sum(s)
 
   #+RESULTS:
   :results:
-  # Out[7]:
+  # Out[6]:
   #+BEGIN_EXAMPLE
     No     0.616162
     Yes    0.383838
@@ -216,8 +186,8 @@ for row in rows:
 
   #+RESULTS:
   :results:
-  # Out[8]:
-  [[file:./obipy-resources/jdRevr.png]]
+  # Out[7]:
+  [[file:./obipy-resources/7yifNa.png]]
   :end:
 
   From which we recognize that the Pclass and Embarked has the potential of being strong predictors.
@@ -246,7 +216,7 @@ cabins_split
 
   #+RESULTS:
   :results:
-  # Out[9]:
+  # Out[8]:
   #+BEGIN_EXAMPLE
     Deck_0 Room_0 Deck_1 Room_1 Deck_2 Room_2 Deck_3 Room_3
     0      NaN    NaN    NaN    NaN    NaN    NaN    NaN    NaN
@@ -273,7 +243,7 @@ cabins_split.fillna("Missing", inplace=True)
 
   #+RESULTS:
   :results:
-  # Out[10]:
+  # Out[9]:
   :end:
 
   Merge the datasets
@@ -287,7 +257,7 @@ t = pd.concat([
 
   #+RESULTS:
   :results:
-  # Out[11]:
+  # Out[10]:
   :end:
 
   #+BEGIN_SRC ipython :session :exports both :results raw drawer :async t
@@ -296,7 +266,7 @@ t.head()
 
   #+RESULTS:
   :results:
-  # Out[12]:
+  # Out[11]:
   #+BEGIN_EXAMPLE
     PassengerId  Survived  Pclass  \
     0            1         0       3
@@ -340,9 +310,9 @@ sns.catplot(
 
   #+RESULTS:
   :results:
-  # Out[13]:
-  : <seaborn.axisgrid.FacetGrid at 0x7f95269756d8>
-  [[file:./obipy-resources/3R7FRZ.png]]
+  # Out[12]:
+  : <seaborn.axisgrid.FacetGrid at 0x7f07218046a0>
+  [[file:./obipy-resources/6OTqeh.png]]
   :end:
 
   #+BEGIN_SRC ipython :session :exports both :results raw drawer :async t
@@ -355,9 +325,9 @@ sns.countplot(
 
   #+RESULTS:
   :results:
-  # Out[14]:
+  # Out[13]:
   : <AxesSubplot:xlabel='Deck_0', ylabel='count'>
-  [[file:./obipy-resources/HxsZh8.png]]
+  [[file:./obipy-resources/gmiJ5O.png]]
   :end:
 
   The second plot tells a bit more of the deck variable. Maybe our model will be able to pick out based
@@ -375,9 +345,9 @@ sns.countplot(
 
   #+RESULTS:
   :results:
-  # Out[15]:
+  # Out[14]:
   : <AxesSubplot:xlabel='Deck_1', ylabel='count'>
-  [[file:./obipy-resources/Hjhyna.png]]
+  [[file:./obipy-resources/eG6NGV.png]]
   :end:
   
   I suppose the multiple cabins for 1 person suggests that they travelled multiple people. That is already
@@ -396,8 +366,8 @@ for i in range(0, 4):
 
   #+RESULTS:
   :results:
-  # Out[16]:
-  [[file:./obipy-resources/JpcHEw.png]]
+  # Out[15]:
+  [[file:./obipy-resources/rjFTFF.png]]
   :end:
   
   We can also visualize our continuous variables:
@@ -425,8 +395,8 @@ for k, var in enumerate(con_variables):
 
   #+RESULTS:
   :results:
-  # Out[17]:
-  [[file:./obipy-resources/s5bFnB.png]]
+  # Out[16]:
+  [[file:./obipy-resources/g7iUTn.png]]
   :end:
 
 * Do data transformation and drop variables, e.g. transform categorical variables to dummy variables.
@@ -468,7 +438,7 @@ X, y = prepare_sample(
 
   #+RESULTS:
   :results:
-  # Out[18]:
+  # Out[17]:
   :end:
   
 * Run modelling
@@ -515,14 +485,14 @@ preprocessor = ColumnTransformer(
 )
 clf = Pipeline(steps=[
     ('preprocessor', preprocessor),
-    ('classifier',  RandomForestClassifier(random_state=0))
+    ('classifier',  xgb.XGBClassifier(objective="binary:logistic", random_state=42))
 ])
 # Setup hyperparameter grid
 param_grid = {
-    'classifier__max_depth': [0.5, 0.7],
-    'classifier__n_estimators': np.arange(100, 200, 50)
+    "classifier__colsample_bytree": np.arange(0.3, 0.7, 0.1),
+    "classifier__gamma": np.arange(0, 0.5, 0.1),
+    "classifier__learning_rate": np.arange(0.01, 0.1, 0.01), # default 0.1 
 }
-
 g = GridSearchCV(
     cv=5,
     estimator=clf,
@@ -533,7 +503,7 @@ g = GridSearchCV(
 
 #+RESULTS:
 :results:
-# Out[20]:
+# Out[27]:
 :end:
 
 #+BEGIN_SRC ipython :session :exports both :results raw drawer :async t
@@ -542,8 +512,8 @@ g.best_score_
 
 #+RESULTS:
 :results:
-# Out[27]:
-: 0.6161634548992531
+# Out[31]:
+: 0.8305442219571905
 :end:
 
 * Use Gridsearch results to predict on the test data
@@ -554,7 +524,7 @@ X_test, y_test = prepare_sample(test, None)
 
 #+RESULTS:
 :results:
-# Out[21]:
+# Out[32]:
 :end:
 
 #+BEGIN_SRC ipython :session :exports both :results raw drawer :async t
@@ -563,7 +533,7 @@ X_test.head()
 
 #+RESULTS:
 :results:
-# Out[22]:
+# Out[33]:
 #+BEGIN_EXAMPLE
   Pclass     Sex   Age  SibSp  Parch     Fare Embarked Deck_0 Room_0 Deck_1  \
   0       3    male  34.5      0      0   7.8292        Q    NaN    NaN    NaN
@@ -587,7 +557,7 @@ predictions = g.predict(X_test)
 
 #+RESULTS:
 :results:
-# Out[23]:
+# Out[34]:
 :end:
 
 * Submit predictions
@@ -605,7 +575,7 @@ submission.to_csv(f"./submissions/submission_{t}.csv", index=False)
 
 #+RESULTS:
 :results:
-# Out[37]:
+# Out[35]:
 :end:
 
 #+BEGIN_SRC ipython :session :exports both :results raw drawer :async t
@@ -615,7 +585,7 @@ os.system(f"kaggle competitions submit -c titanic -f submissions/submission_{t}.
 
 #+RESULTS:
 :results:
-# Out[38]:
+# Out[36]:
 : 0
 :end:
 
