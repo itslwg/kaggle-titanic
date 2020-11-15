@@ -1,0 +1,17 @@
+{
+  "id": "itslwg/titanic-eda",
+  "id_no": 12486830,
+  "title": "Titanic EDA",
+  "code_file": "titanic-eda.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": [
+    "titanic"
+  ]
+}
